@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { filter, fromEvent, interval, map, Observable, of, pipe, switchMap, tap } from 'rxjs';
+import { filter, from, fromEvent, interval, map, Observable, of, pipe, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -7,13 +7,24 @@ import { filter, fromEvent, interval, map, Observable, of, pipe, switchMap, tap 
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
+  myArrayOf$ !: Observable<any>;
+  myArrayFrom$ !: Observable<any>;
+  myArray =[10, 20 , 30];
+
   title = 'AppRxJs';
   obs!: Observable<unknown>;
 
 
   ngOnInit(): void {
-  
-    
+  this.myArrayFrom$ = from(this.myArray);
+  this.myArrayFrom$.subscribe(data => console.log('DataFrom', data));
+  this.myArrayFrom$.pipe(
+    tap(data => console.log('DataTap', data))
+  ).subscribe(data => console.log('DataTap2', data));   
+
+  this.myArrayOf$ = of(this.myArray);
+  this.myArrayOf$.subscribe(data => console.log('DataOf', data));
+
   }
   rxjsSwitchMap(){
     //SwitchMap interrumpe el observable
@@ -39,7 +50,6 @@ export class AppComponent implements OnInit{
     const squared = toQuared(nums);
     squared.subscribe(x => console.log(x))
   }
-
   rxjsCountInterval(){
     const count = interval(1000);
     count.subscribe((n)=>{
