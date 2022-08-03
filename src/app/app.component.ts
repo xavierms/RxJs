@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { interval, Observable } from 'rxjs';
+import { filter, interval, map, Observable, of, pipe } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,13 +12,25 @@ export class AppComponent implements OnInit{
 
 
   ngOnInit(): void {
-
+    
   }
+
+  rxjsMapFilter(){
+    const nums = of(1,2,3,4,5);
+
+    const toQuared = pipe(
+      filter((n: number) => n % 2 === 0),
+      map(x => x * x)
+    );
+
+    const squared = toQuared(nums);
+    squared.subscribe(x => console.log(x))
+  }
+
   rxjsCountInterval(){
     const count = interval(1000);
     count.subscribe((n)=>{
       console.log(`Each  seconds`);
-      
     })
   }
 
