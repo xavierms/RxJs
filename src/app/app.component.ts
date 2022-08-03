@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { filter, interval, map, Observable, of, pipe } from 'rxjs';
+import { filter, fromEvent, interval, map, Observable, of, pipe, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +12,22 @@ export class AppComponent implements OnInit{
 
 
   ngOnInit(): void {
+  
     
   }
-
+  rxjsSwitchMap(){
+    //SwitchMap interrumpe el observable
+    const click = fromEvent(document, 'click').pipe(
+      switchMap(() => interval(1000))).subscribe(console.log)
+  }
+  rxjsTap(){
+    const clicks = fromEvent(document, 'click');
+    const positions = clicks.pipe(
+      tap(ev => console.log('Processing: ' + ev),
+      err => console.log(err))
+      );
+      positions.subscribe(pos => console.log(pos));
+  }
   rxjsMapFilter(){
     const nums = of(1,2,3,4,5);
 
@@ -33,7 +46,6 @@ export class AppComponent implements OnInit{
       console.log(`Each  seconds`);
     })
   }
-
   rxjsObservable(){
     this.obs = new Observable(subscriber => {
       subscriber.next(1);
